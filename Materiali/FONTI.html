@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>CREDITS</title>
+        <script src="//cdn.jsdelivr.net/phaser/2.5.0/phaser.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+.center {
+  background-color: #2f431f;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  margin-top: 4%;
+  display: flex;
+  justify-content: space-around;
+  background-size: cover;
+  overflow: hidden;
+}
+.container {
+position: relative;
+  width: 1024px;
+  height: 768px;
+}
+
+.container img {
+  width: 1024px;
+  height: 768px;
+
+}
+
+.container .btn1 {
+  position: absolute;
+  top: 680px;
+  left: 890px;
+  width: 100px;
+  height: 100px;
+  transform: translate(-20%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  background-image: URL('AUTORI/ICONA HOME_2.png');
+  border: none;
+    border-radius: 138px;
+}
+
+
+
+.container .btn1:hover {
+  transform: scale(1.2);
+  transition: transform .2s;
+  transform-origin: 100% 100%;
+}
+
+
+</style>
+    </head>
+    <body class="center">
+
+<div class="container">
+  <img src="AUTORI/fontimateriale.jpg"  width="1024" height="768">
+  <a href="index.html"><button class="btn1"></button></a>
+
+</div>
+
+<script type="text/javascript">
+
+window.onload = function() {
+
+    //  Note that this html file is set to pull down Phaser 2.5.0 from the JS Delivr CDN.
+    //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
+    //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
+
+    //var game = new Phaser.Game(1024, 768, Phaser.AUTO, '', { preload: preload, create: create });
+
+    function preload () {
+
+    }
+
+    function create () {
+
+
+    }
+
+};
+
+</script>
+
+
+    </body>
+</html>

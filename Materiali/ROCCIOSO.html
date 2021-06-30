@@ -1,0 +1,2750 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <style>
+        .center{
+          width: 100%;
+          height: 100%;
+          margin: 0;
+          margin-top: 4%;
+          display: flex;
+          justify-content: space-around;
+          background-color: #2f431f;
+          background-size: cover;
+          overflow: hidden;
+        }
+      </style>
+        <title> UP: missione beccaccino </title>
+        <script src="//cdn.jsdelivr.net/phaser/2.5.0/phaser.min.js"></script>
+
+    </head>
+    <body class="center">
+
+
+    <script type="text/javascript">
+
+    window.onload = function() {
+
+        //  Note that this html file is set to pull down Phaser 2.5.0 from the JS Delivr CDN.
+        //  Although it will work fine with this tutorial, it's almost certainly not the most current version.
+        //  Be sure to replace it with an updated version before you start experimenting with adding your own code.
+
+        var game = new Phaser.Game(1024, 768, Phaser.AUTO, '', { preload: preload, create: create, update: update});
+
+
+        function preload () {
+            game.load.audio('giungla', 'audio/musica platform00.mp3');
+            game.load.image('background1', 'roccioso/SFONDO_ROCCIOSO.png');
+            game.load.image('background2', 'ZONA PALUDE_FORESTA1/SFONDO.png');
+            game.load.image('background3', 'ZONA FORESTA2/SFONDO.png');
+            game.load.spritesheet('player', 'sprites/RUSSELLSHEET 70x39,14.png', 39.14, 70);
+            game.load.image('platform1', 'sprites/1_roccia.png');
+            game.load.image('platform2', 'sprites/2_roccia.png');
+            game.load.image('platform3', 'sprites/3_roccia.png');
+            game.load.image('salto1', 'sprites/palloncino_up.png');
+            game.load.image('salto2', 'sprites/palloncino_up.png');
+            game.load.image('salto3', 'sprites/palloncino_up.png');
+            game.load.image('salto4', 'sprites/palloncino_up.png');
+            game.load.image('salto5', 'sprites/palloncino_up.png');
+            game.load.image('salto6', 'sprites/palloncino_up.png');
+            game.load.image('salto7', 'sprites/palloncino_up.png');
+            game.load.image('salto8', 'sprites/palloncino_up.png');
+            game.load.image('salto9', 'sprites/palloncino_up.png');
+            game.load.image('percorso1', 'roccioso/1_PIATTAFORMA.png');
+            game.load.image('percorso2', 'roccioso/2_PIATTAFORMA.png');
+            game.load.image('percorso3', 'roccioso/3_PIATTAFORMA.png');
+            game.load.image('percorso4', 'roccioso/4_PIATTAFORMA.png');
+            game.load.image('percorso5', 'roccioso/5_PIATTAFORMA.png');
+            game.load.image('percorso6', 'roccioso/6_PIATTAFORMA.png');
+            game.load.image('percorso8', 'roccioso/8_PIATTAFORMA.png');
+            game.load.image('palloncinoVita', 'sprites/palloncino_vita.png');
+            game.load.image('3cuoripieni', 'sprites/cuori pieni.png');
+            game.load.image('3cuoritrasparenti', 'sprites/cuori trasparenti.png');
+          //  game.load.image('checkpoint', 'sprites/bandierina.png');
+          //  game.load.image('checkpointverde', 'sprites/bandierina_verde.png');
+            game.load.image ('fittizia1', 'MORTE/MORTE_1.png');
+            game.load.image ('fittizia2', 'MORTE/MORTE_2.png');
+            game.load.image ('fittizia3', 'MORTE/MORTE_3.png');
+            game.load.image ('fittizia4', 'MORTE/MORTE_4.png');
+            game.load.image ('fittizia5', 'MORTE/MORTE_5.png');
+            game.load.image('12goccepiene', 'sprites/gocce piene.png');
+            game.load.image('goccia_da_lanciare', 'sprites/goccia2.png');
+            game.load.image('iconapalloncino', 'sprites/iconapalloncino.png');
+
+            game.load.image('2_roccia_franata', 'PIATTAFORME_FRANATE/2_roccia_franata.png');
+            game.load.image('3_roccia_franata', 'PIATTAFORME_FRANATE/3_roccia_franata.png');
+            game.load.image('2_piattaforma_franata', 'PIATTAFORME_FRANATE/2_PIATTAFORMA_FRANATA.png');
+            game.load.image('3_piattaforma_franata', 'PIATTAFORME_FRANATE/3_PIATTAFORMA_FRANATA.png');
+            game.load.image('4_piattaforma_franata', 'PIATTAFORME_FRANATE/4_PIATTAFORMA_FRANATA.png');
+            game.load.image('8_piattaforma_franata', 'PIATTAFORME_FRANATE/8_PIATTAFORMA_FRANATA.png');
+            game.load.image('10_piattaforma_franata', 'PIATTAFORME_FRANATE/10_PIATTAFORMA_FRANATA.png');
+            game.load.image('11_piattaforma_franata', 'PIATTAFORME_FRANATE/11_PIATTAFORMA_FRANATA.png');
+            game.load.image('17_piattaforma_franata', 'PIATTAFORME_FRANATE/17_PIATTAFORMA_FRANATA.png');
+
+            game.load.image('istruzionimovimenti', 'istruzioni/MOVIMENTO.png');
+            game.load.image('istruzionisalto', 'istruzioni/PALLONCINO GIALLO.png');
+            game.load.image('istruzionivita', 'istruzioni/PALLONCINO ROSSO.png');
+            game.load.image('istruzioniacqua', 'istruzioni/PALLONCINO BLU.png');
+            game.load.image('istruzionifiamma', 'istruzioni/ATTENTOFIAMME.png');
+            game.load.image('istruzionisparo', 'istruzioni/SPEGNIFUOCO_1.png');
+            game.load.image('istruzionikevin', 'istruzioni/KEVIN.png');
+
+
+            //GAMEOVER
+            game.load.image('gameover', 'GAME OVER/GAMEOVER.jpg');
+            game.load.image('iconahome', 'AUTORI/HOME_def.png');
+            game.load.image('iconaplaypiccola', 'COPERTINA/ICONA PLAY_piccola.png');
+
+            //vittoria
+            game.load.image('vittoria', 'VITTORIA/FINALEVITTORIA.jpg');
+
+
+
+
+            //file zona palude
+            game.load.image('pianopalude1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_1.png');
+            game.load.image('pianopalude2', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_2.png');
+            game.load.image('pianopalude3', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_3.png');
+            game.load.image('pianopalude4', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_4.png');
+            game.load.image('pianopalude5', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_5.png');
+            game.load.image('pianopalude6', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_6.png');
+            game.load.image('pianopalude7', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_7.png');
+            game.load.image('pianopalude8', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_8.png');
+            game.load.image('acqua1', 'ZONA PALUDE_FORESTA1/ACQUA/ACQUA_1.png');
+            game.load.image('acqua2', 'ZONA PALUDE_FORESTA1/ACQUA/ACQUA_2.png');
+            game.load.image('acqua3', 'ZONA PALUDE_FORESTA1/ACQUA/ACQUA_3.png');
+            game.load.image('acqua4', 'ZONA PALUDE_FORESTA1/ACQUA/ACQUA_4.png');
+            game.load.image('acqua5', 'ZONA PALUDE_FORESTA1/ACQUA/ACQUA_5.png');
+            game.load.image('platformp1', 'ZONA PALUDE_FORESTA1/PIATTAFORME/PIATTAFORMA_1.png');
+            game.load.image('platformp2', 'ZONA PALUDE_FORESTA1/PIATTAFORME/PIATTAFORMA_2.png');
+            game.load.image('platformp3', 'ZONA PALUDE_FORESTA1/PIATTAFORME/PIATTAFORMA_4.png');
+            game.load.image('ninfea', 'sprites/NINFEA.png');
+            game.load.image('liana', 'sprites/liana.png');
+            game.load.image('fioreacqua1', 'ZONA PALUDE_FORESTA1/ACQUA/FIORE_ACQUA_1.png');
+            game.load.image('fioreacqua2', 'ZONA PALUDE_FORESTA1/ACQUA/FIORE_ACQUA_2.png');
+            game.load.image('fioreacqua3', 'ZONA PALUDE_FORESTA1/ACQUA/FIORE_ACQUA_3.png');
+
+
+            //zona foresta 1
+            game.load.image('piano1foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_9.png');
+            game.load.image('piano2foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_10.png');
+            game.load.image('piano3foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_11.png');
+            game.load.image('piano4foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_12.png');
+            game.load.image('piano5foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_13.png');
+            game.load.image('piano6foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_14.png');
+            game.load.image('piano7foresta1', 'ZONA PALUDE_FORESTA1/PIANO/PIANO_15.png');
+            game.load.spritesheet('bloccofiamme1', 'ZONA PALUDE_FORESTA1/FIAMME/FIAMME1_spritesheet.png', 692.5, 255);
+            game.load.spritesheet('bloccofiamme2', 'ZONA PALUDE_FORESTA1/FIAMME/FIAMME2_spritesheet.png', 660, 255);
+            game.load.image('platformf1', 'ZONA PALUDE_FORESTA1/PIATTAFORME/PIATTAFORMA_10.png');
+            game.load.image('platform2f1', 'ZONA PALUDE_FORESTA1/PIATTAFORME/PIATTAFORMA_13.png');
+            game.load.image('platform3f1', 'ZONA PALUDE_FORESTA1/PIATTAFORME/PIATTAFORMA_17.png');
+            game.load.spritesheet('fiammapiccola', 'sprites/FIAMME/fiammapiccolaspritesheet.png', 51.66, 80);
+            game.load.spritesheet('fiammamedia', 'sprites/FIAMME/fiammamediaspritesheet.png', 155.6, 258);
+            game.load.spritesheet('fiammagrande', 'sprites/FIAMME/fiammagrandespritesheet.png', 181.6, 355);
+            game.load.image('palloncinoacqua1', 'sprites/palloncino_acqua.png');
+            game.load.image('palloncinoacqua2', 'sprites/palloncino_acqua.png');
+            game.load.image('palloncinoacqua3', 'sprites/palloncino_acqua.png');
+            game.load.image('palloncinoacqua4', 'sprites/palloncino_acqua.png');
+            game.load.image('palloncinoacqua5', 'sprites/palloncino_acqua.png');
+            game.load.image('palloncinoacqua6', 'sprites/palloncino_acqua.png');
+            game.load.image('palloncinoacqua7', 'sprites/palloncino_acqua.png');
+
+
+            //zona foresta 2
+            game.load.image('piano1foresta2', 'ZONA FORESTA2/PIANI/PIANO_1.png');
+            game.load.image('piano2foresta2', 'ZONA FORESTA2/PIANI/PIANO_2.png');
+            game.load.image('piano3foresta2', 'ZONA FORESTA2/PIANI/PIANO_3.png');
+            game.load.image('piano4foresta2', 'ZONA FORESTA2/PIANI/PIANO_4.png');
+            game.load.image('piano5foresta2', 'ZONA FORESTA2/PIANI/PIANO_5.png');
+            game.load.image('piano6foresta2', 'ZONA FORESTA2/PIANI/PIANO_6.png');
+            game.load.image('piano7foresta2', 'ZONA FORESTA2/PIANI/PIANO_7.png');
+            game.load.image('piano8foresta2', 'ZONA FORESTA2/PIANI/PIANO_8.png');
+            game.load.image('piano9foresta2', 'ZONA FORESTA2/PIANI/PIANO_9.png');
+            game.load.image('piano10foresta2', 'ZONA FORESTA2/PIANI/PIANO_10.png');
+            game.load.image('piano11foresta2', 'ZONA FORESTA2/PIANI/PIANO_11.png');
+            game.load.image('piano12foresta2', 'ZONA FORESTA2/PIANI/PIANO_12.png');
+            game.load.spritesheet('fiamma1foresta2', 'ZONA FORESTA2/FIAMME/FIAMME1_spritesheet.png', 207, 255);
+            game.load.spritesheet('fiamma2foresta2', 'ZONA FORESTA2/FIAMME/FIAMME2_spritesheet.png', 1995, 112);
+            game.load.spritesheet('fiamma3foresta2', 'ZONA FORESTA2/FIAMME/FIAMME3_spritesheet.png', 225, 145);
+            game.load.spritesheet('fiamma4foresta2', 'ZONA FORESTA2/FIAMME/FIAMME4_spritesheet.png', 580, 111);
+            game.load.spritesheet('fiamma5foresta2', 'ZONA FORESTA2/FIAMME/FIAMME5_spritesheet.png', 233, 146);
+            game.load.spritesheet('fiamma6foresta2', 'ZONA FORESTA2/FIAMME/FIAMME6_spritesheet.png', 1520, 138);
+            game.load.spritesheet('fiamma7foresta2', 'ZONA FORESTA2/FIAMME/FIAMME7_spritesheet.png', 853, 231);
+            game.load.image('piattaforma1foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_1.png');
+            game.load.image('piattaforma2foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_2.png');
+            game.load.image('piattaforma3foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_3.png');
+            game.load.image('piattaforma4foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_4.png');
+            game.load.image('piattaforma5foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_5.png');
+            game.load.image('piattaforma6foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_6.png');
+            game.load.image('piattaforma7foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_7.png');
+            game.load.image('piattaforma8foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_8.png');
+            game.load.image('piattaforma9foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_9.png');
+            game.load.image('piattaforma10foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_10.png');
+            game.load.image('piattaforma11foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_11.png');
+            game.load.image('piattaforma12foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_12.png');
+            game.load.image('piattaforma13foresta2', 'ZONA FORESTA2/PIATTAFORME/PIATTAFORMA_13.png');
+
+
+
+          //roccia beccaccino e beccaccino
+          game.load.image('roccia1', 'ZONA FORESTA2/ROCCIA BECCACCINO/ROCCIA_BECCACCINO1.png');
+          game.load.image('roccia2', 'ZONA FORESTA2/ROCCIA BECCACCINO/ROCCIA_BECCACCINO2.png');
+          game.load.image('roccia3', 'ZONA FORESTA2/ROCCIA BECCACCINO/ROCCIA_BECCACCINO3.png');
+          game.load.spritesheet('beccaccio', 'ZONA FORESTA2/beccaccino_spritesheet.png', 233, 296);
+
+
+
+        };
+        var giungla;
+        var background1;
+        var background2;
+        var background3;
+        var player;
+        var platforms;
+        //var movingPlatforms;
+        var movingPlatform;
+        var platformsgiù;
+        var cursors;
+        var jumpButton;
+        var acqua;
+        var k = 0;
+        var arma;
+        var armi;
+        var volare = false;
+        var salto;
+      //  var checkpoints;
+      //  var checkpointverde;
+        var fittizia;
+        var livesCounter;
+        var lives = 2;
+        var maxLives = 3;
+        var livesIcon;
+        var livesCrop;
+        var dropsCounter;
+        var drops = 0;
+        var maxDrops = 12;
+        var dropsIcon;
+        var dropsCrop;
+        var istruzione1;
+
+//var zona PALUDE_FORESTA1
+        var pianipalude;
+        var acque;
+        var piattaforme;
+        var ninfee;
+        var liane;
+        var fioriacqua;
+        var movingPlatformdxsxp1;
+        var movingPlatformdxsxp2;
+        var cfb=4;
+        var cfg=3;
+        var cfm=2;
+
+
+
+        // SFONDO (RICORDARSI DI METTERE LA LARGHEZZA DELL'IMMAGINE DI SFONDO COME X)
+        function create () {
+          //audio
+
+          giungla = game.add.audio('giungla', 1);
+          giungla.loop = true;
+          giungla.play();
+
+
+
+          //SFONDO
+          background1 = game.add.sprite(0, 0, 'background1');
+          background2 = game.add.sprite(9498, 0, 'background2');
+          background3 = game.add.sprite(25319, 0, 'background3');
+
+
+          //definisce i confini del mondo
+          game.world.setBounds(0, 0, 37409, 768);
+
+
+          //GIOCATORE
+          player = game.add.sprite(50, 70, 'player');
+          game.physics.arcade.enable(player);
+          player.body.collideWorldBounds = true;
+          player.body.gravity.y = 620;
+
+          //animazione giocatore
+          player.animations.add('left', [7, 6, 5, 4, 3, 2, 1, 0], 10, true);
+          player.animations.add('turn', [9], 20, true);
+          player.animations.add('right', [10, 11, 12, 13, 14, 15, 16, 17], 10, true);
+          player.animations.add('saltoDx', [10], 20, true);
+          player.animations.add('saltoSx', [2], 20, true);
+
+
+          //TASTI PER GIOCARE
+          cursors = game.input.keyboard.createCursorKeys();
+          jumpButton = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
+
+          //GAMEOVER roccioso
+          fittizia1 = game.add.sprite (1283, 767, 'fittizia1');
+          game.physics.arcade.enable(fittizia1);
+          fittizia1.body.immovable = true;
+
+
+          fittizia2 = game.add.sprite (2368, 767, 'fittizia2');
+          game.physics.arcade.enable(fittizia2);
+          fittizia2.body.immovable = true;
+
+
+          fittizia3 = game.add.sprite (3280, 767, 'fittizia3');
+          game.physics.arcade.enable(fittizia3);
+          fittizia3.body.immovable = true;
+
+
+          fittizia4 = game.add.sprite (4845, 767, 'fittizia4');
+          game.physics.arcade.enable(fittizia4);
+          fittizia4.body.immovable = true;
+
+
+          fittizia5 = game.add.sprite (7410, 767, 'fittizia5');
+          game.physics.arcade.enable(fittizia5);
+          fittizia5.body.immovable = true;
+
+
+          //contatore vite
+          cuoritrasparenti = game.add.sprite(25,30, '3cuoritrasparenti');
+          cuoritrasparenti.fixedToCamera = true;
+          livesCounter = game.add.sprite(25, 30, '3cuoripieni');
+          livesCounter.fixedToCamera = true;
+
+          livesIcon = livesCounter.width / maxLives;
+          livesCrop = new Phaser.Rectangle(0, 0, lives * livesIcon, livesCounter.height);
+          livesCounter.crop(livesCrop);
+
+
+          //icona palloncino che indica superpotere
+          iconapalloncino = game.add.sprite (960, 32, 'iconapalloncino');
+          iconapalloncino.fixedToCamera = true;
+          iconapalloncino.visible = false;
+
+
+          //contatore 12goccepiene
+          dropsCounter = game.add.sprite(25, 65, '12goccepiene');
+          dropsCounter.fixedToCamera = true;
+
+          dropsIcon = dropsCounter.width / maxDrops;
+          dropsCrop = new Phaser.Rectangle(0, 0, drops * dropsIcon, dropsCounter.height);
+          dropsCounter.crop(dropsCrop);
+
+
+          //goccia da lanciare
+          goccialanciata = game.add.weapon(3, 'goccia_da_lanciare');
+          goccialanciata.trackSprite(player, 80, 30);
+          goccialanciata.fireAngle = 0;
+          goccialanciata.bulletSpeed = 250;
+          goccialanciata.bulletGravity.y = 10;
+          goccialanciata.bulletKillType = Phaser.Weapon.KILL_CAMERA_BOUNDS;
+          fireButton = game.input.keyboard.addKey(Phaser.Keyboard.F);
+
+
+
+
+          //istruzione movimento
+          istruzione1 = game.add.sprite(150, 100, 'istruzionimovimenti');
+          istruzione1.visible = false;
+
+          //istruzione salto
+          istruzione2 = game.add.sprite(3800, 100, 'istruzionisalto');
+          istruzione2.visible = false;
+
+
+          //istruzione vita
+          istruzione3 = game.add.sprite(5750, 100, 'istruzionivita');
+          istruzione3.visible = false;
+
+
+          //istruzione acqua
+          istruzione4 = game.add.sprite(24430, 100, 'istruzioniacqua');
+          istruzione4.visible = false;
+
+
+          //istruzione fiamma
+          istruzione5 = game.add.sprite(10000, 100, 'istruzionifiamma');
+          istruzione5.visible = false;
+
+          //istruzione SPARO
+          istruzione6 = game.add.sprite(25200, 100, 'istruzionisparo');
+          istruzione6.visible = false;
+
+          //istruzione kevin
+          istruzione7 = game.add.sprite(35500, 100, 'istruzionikevin');
+          istruzione7.visible = false;
+
+
+          //INIZIO PALLONCINI
+          //superpotere salto (palloncini gialli)
+          salto1 = game.add.sprite(4200, 450, 'salto1');
+          salto2 = game.add.sprite(7100, 300, 'salto2');
+          salto3 = game.add.sprite(12500, 320, 'salto3');
+          salto4 = game.add.sprite(12900, 500, 'salto4');
+          salto5 = game.add.sprite(16100, 300, 'salto5');
+          salto6 = game.add.sprite(20960, 40, 'salto6');
+          salto7 = game.add.sprite(28660, 270, 'salto7');
+          salto8 = game.add.sprite(33150, 507, 'salto8');
+          salto9 = game.add.sprite(35250, 420, 'salto9');
+
+          game.physics.arcade.enable(salto1);
+          game.physics.arcade.enable(salto2);
+          game.physics.arcade.enable(salto3);
+          game.physics.arcade.enable(salto4);
+          game.physics.arcade.enable(salto5);
+          game.physics.arcade.enable(salto6);
+          game.physics.arcade.enable(salto7);
+          game.physics.arcade.enable(salto8);
+          game.physics.arcade.enable(salto9);
+
+
+          //palloncini vite (rossi)
+          pallonciniVite = game.add.physicsGroup();
+          pallonciniVite.create(6100, 350, 'palloncinoVita');
+          pallonciniVite.create(12680, 90, 'palloncinoVita');
+          pallonciniVite.create(17850, 400, 'palloncinoVita');
+          pallonciniVite.create(21895, 420, 'palloncinoVita');
+          pallonciniVite.create(23970, 150, 'palloncinoVita');
+          pallonciniVite.create(29050, 110, 'palloncinoVita');
+          pallonciniVite.create(29920, 200, 'palloncinoVita');
+          pallonciniVite.create(32600, 507, 'palloncinoVita');
+          pallonciniVite.setAll('body.immovable', true);
+          game.physics.arcade.enable(pallonciniVite);
+
+
+          //palloncini acqua (azzurri)
+
+          palloncinoacqua1=game.add.sprite(24670, 286, 'palloncinoacqua1');
+          palloncinoacqua2=game.add.sprite(26180, 205, 'palloncinoacqua2');
+          palloncinoacqua3=game.add.sprite(27705, 300, 'palloncinoacqua3');
+          palloncinoacqua4=game.add.sprite(30560, 288, 'palloncinoacqua4');
+          palloncinoacqua5=game.add.sprite(33480, 100, 'palloncinoacqua5');
+          palloncinoacqua6=game.add.sprite(34025, 65, 'palloncinoacqua6');
+          palloncinoacqua7=game.add.sprite(35250, 100, 'palloncinoacqua7');
+
+          game.physics.arcade.enable(palloncinoacqua1);
+           game.physics.arcade.enable(palloncinoacqua2);
+            game.physics.arcade.enable(palloncinoacqua3);
+             game.physics.arcade.enable(palloncinoacqua4);
+              game.physics.arcade.enable(palloncinoacqua5);
+               game.physics.arcade.enable(palloncinoacqua6);
+               game.physics.arcade.enable(palloncinoacqua7);
+
+
+           //FINE PALLONCINI
+
+
+
+
+           //PIATTAFORME CHE CADONO (solo giù) DI TUTTE LE AMBIENTAZIONI
+           platformsgiù = game.add.physicsGroup();
+           platformsgiù.create(2770, 500, '3_roccia_franata');
+           platformsgiù.create(5180, 290, '3_roccia_franata');
+           platformsgiù.create(7380, 260, '2_roccia_franata');
+           platformsgiù.create(14380, 400, '2_piattaforma_franata');
+           platformsgiù.create(14670, 400, '2_piattaforma_franata');
+           platformsgiù.create(16300, 280, '4_piattaforma_franata');
+           platformsgiù.create(20200, 410, '2_piattaforma_franata');
+           platformsgiù.create(21290, 350, '17_piattaforma_franata');
+           platformsgiù.create(22900, 350, '17_piattaforma_franata');
+           platformsgiù.create(28150, 530, '2_piattaforma_franata');
+           platformsgiù.create(28340, 530, '3_piattaforma_franata');
+           platformsgiù.create(29340, 410, '17_piattaforma_franata');
+           platformsgiù.create(31800, 600, '8_piattaforma_franata');
+           platformsgiù.create(34600, 500, '10_piattaforma_franata');
+           platformsgiù.create(34770, 560, '11_piattaforma_franata');
+           platformsgiù.create(34980, 480, '10_piattaforma_franata');
+           platformsgiù.setAll('body.collideWorldBounds', true);
+
+
+
+           //INIZIO ZONA ROCCIOSA
+
+            //piani roccioso
+            percorsi = game.add.physicsGroup();
+            percorsi.create(-46, 620, 'percorso1');
+            percorsi.create(1039, 540, 'percorso2');
+            percorsi.create(1580, 627, 'percorso3');
+            percorsi.create(3072, 428, 'percorso4');
+            percorsi.create(3760, 620, 'percorso5');
+            percorsi.create(5880, 540, 'percorso6');
+            percorsi.create(6330, 620, 'percorso5');
+            percorsi.create(7923, 628, 'percorso8');
+            percorsi.setAll('body.immovable', true);
+            game.physics.arcade.enable(percorsi);
+
+
+            //piattaforme roccioso (ferme)
+            platforms = game.add.physicsGroup();
+            platforms.create(2470, 600, 'platform1');
+            platforms.create(3370, 500, 'platform2');
+            platforms.create(4450, 420, 'platform2');
+            platforms.create(5400, 370, 'platform2');
+            platforms.create(7020, 500, 'platform1');
+            platforms.create(8100, 380, 'platform3');
+            platforms.create(8320, 440, 'platform3');
+            game.physics.arcade.enable(platforms);
+            platforms.setAll('body.immovable', true);
+
+
+            //prima piattaforma su e giù (zona rocciosa)
+            movingPlatform = game.add.sprite (4810,200,'platform2');
+            game.physics.arcade.enable(movingPlatform);
+            movingPlatform.body.imovable = true;
+            movingPlatform.body.allowGravity = false;
+            movingPlatform.body.velocity.y = 20;
+
+
+            //seconda piattaforma su e giù (zona rocciosa)
+            movingPlatform2r = game.add.sprite (7800, 320, 'platform1');
+            game.physics.arcade.enable(movingPlatform2r);
+            movingPlatform2r.body.imovable = true;
+            movingPlatform2r.body.allowGravity = false;
+            movingPlatform2r.body.velocity.y = 20;
+
+            //FINE ZONA ROCCIOSA
+
+
+
+
+
+            //INIZIO ZONA PALUDE
+
+            //prima acqua palude
+            acqua1 = game.add.sprite(10405,644, 'acqua1');
+            game.physics.arcade.enable(acqua1);
+            acqua1.body.immovable = true;
+
+
+            //seconda acqua palude
+            acqua2 = game.add.sprite(11556,643, 'acqua2');
+            game.physics.arcade.enable(acqua2);
+            acqua2.body.immovable = true;
+
+
+            //terza acqua palude
+            acqua3 = game.add.sprite(13218,593, 'acqua3');
+            game.physics.arcade.enable(acqua3);
+            acqua3.body.immovable = true;
+
+
+            //quarta acqua palude
+            acqua4 = game.add.sprite(14225,593, 'acqua4');
+            game.physics.arcade.enable(acqua4);
+            acqua4.body.immovable = true;
+
+            //quinta acqua palude
+            acqua5 = game.add.sprite(15708, 644, 'acqua5');
+            game.physics.arcade.enable(acqua5);
+            acqua5.body.immovable = true;
+
+            //piani palude
+            pianipalude = game.add.physicsGroup();
+            pianipalude.create(9498, 628, 'pianopalude1');
+            pianipalude.create(10848, 501, 'pianopalude2');
+            pianipalude.create(11086, 632, 'pianopalude3');
+            pianipalude.create(12270, 635, 'pianopalude4');
+            pianipalude.create(12984, 365, 'pianopalude5');
+            pianipalude.create(14100, 362, 'pianopalude6');
+            pianipalude.create(15001, 500, 'pianopalude7');
+            pianipalude.create(15238, 632, 'pianopalude8');
+            pianipalude.setAll('body.immovable', true);
+            game.physics.arcade.enable(pianipalude);
+
+
+            //piattaforme palude (ferme)
+            piattaforme = game.add.physicsGroup();
+            piattaforme.create(12400, 510, 'platformp3');
+            piattaforme.create(12650, 260, 'platformp2');
+            piattaforme.create(13448, 400, 'platformp1');
+            piattaforme.create(15998, 500, 'platformp3');
+            piattaforme.create(16948, 360, 'platformp1');
+            piattaforme.setAll('body.immovable', true);
+            game.physics.arcade.enable(piattaforme);
+
+
+            //prima piattaforma dx-sx (palude)
+            movingPlatformdxsxp2 = game.add.sprite (10420, 510, '2_piattaforma_franata');
+            game.physics.arcade.enable(movingPlatformdxsxp2);
+            movingPlatformdxsxp2.body.imovable = true;
+            movingPlatformdxsxp2.body.allowGravity = false;
+            movingPlatformdxsxp2.body.velocity.x =20;
+
+
+
+            //prima piattaforma su e giù (palude)
+            movingPlatform1p = game.add.sprite (16598, 320, 'platformp3');
+            game.physics.arcade.enable(movingPlatform1p);
+            movingPlatform1p.body.imovable = true;
+            movingPlatform1p.body.allowGravity = false;
+            movingPlatform1p.body.velocity.y = 20;
+
+
+            //seconda piattaforma su e giù (palude)
+            movingPlatform2p = game.add.sprite (17498, 340, 'platformp2');
+            game.physics.arcade.enable(movingPlatform2p);
+            movingPlatform2p.body.imovable = true;
+            movingPlatform2p.body.allowGravity = false;
+            movingPlatform2p.body.velocity.y = 20;
+
+
+            //ninfee
+            ninfee = game.add.physicsGroup();
+            ninfee.create(11636, 585, 'ninfea');
+            ninfee.create(11840, 585, 'ninfea');
+            ninfee.create(12062, 585, 'ninfea');
+            ninfee.create(15808, 585, 'ninfea');
+            ninfee.setAll('body.immovable', true);
+            game.physics.arcade.enable(ninfee);
+
+
+            //fiori acqua (marroni)
+            fioriacqua = game.add.physicsGroup();
+            fioriacqua.create(10550, 630, 'fioreacqua1');
+            fioriacqua.create(13300, 630, 'fioreacqua2');
+            fioriacqua.create(13950, 600, 'fioreacqua3');
+            fioriacqua.create(17310, 600, 'fioreacqua3');
+            fioriacqua.setAll('body.immovable', true);
+            game.physics.arcade.enable(fioriacqua);
+
+            //FINE ZONA PALUDE_FORESTA1
+
+
+
+
+
+            //INIZIO ZONA FORESTA 1
+
+            //fiamme fisse foresta 1 (blocchi di fiamme)
+            fiammablocco1f1 = game.add.sprite(22473, 513, 'bloccofiamme1');
+            game.physics.arcade.enable(fiammablocco1f1);
+            fiammablocco1f1.body.collideWorldBounds = true;
+            fiammablocco1f1.body.immovable = true;
+            fiammablocco1f1.animations.add('left', [0,1], 6, true);
+            fiammablocco1f1.animations.play ('left');
+
+            fiammablocco2f1 = game.add.sprite(23294, 513, 'bloccofiamme1');
+            game.physics.arcade.enable(fiammablocco2f1);
+            fiammablocco2f1.body.collideWorldBounds = true;
+            fiammablocco2f1.body.immovable = true;
+            fiammablocco2f1.animations.add('left', [0,1], 6, true);
+            fiammablocco2f1.animations.play ('left');
+
+            //piani foresta 1
+            pianiforesta1 = game.add.physicsGroup();
+            pianiforesta1.create(17612, 624, 'piano1foresta1');
+            pianiforesta1.create(22000, 500, 'piano2foresta1');
+            pianiforesta1.create(22234, 380, 'piano3foresta1');
+            pianiforesta1.create(23168, 364, 'piano4foresta1');
+            pianiforesta1.create(23962, 370, 'piano5foresta1');
+            pianiforesta1.create(24198, 505, 'piano6foresta1');
+            pianiforesta1.create(24433, 624, 'piano7foresta1');
+            pianiforesta1.setAll('body.immovable', true);
+            game.physics.arcade.enable(pianiforesta1);
+
+            //piattaforme foresta 1 (ferme)
+            piattaformeforesta1 = game.add.physicsGroup();
+            piattaformeforesta1.create(18690, 500, 'platformp2');
+            piattaformeforesta1.create(18910, 380, 'platformf1');
+            piattaformeforesta1.create(19250, 350, 'platformp3');
+            piattaformeforesta1.create(19580, 430, 'platformp2');
+            piattaformeforesta1.create(20000, 310, 'platformp2');
+            piattaformeforesta1.create(20000, 520, 'platform2f1');
+            piattaformeforesta1.create(20250, 190, 'platformp3');
+            piattaformeforesta1.create(20600, 150, 'platformf1');
+            piattaformeforesta1.create(20750, 350, 'platform3f1');
+            piattaformeforesta1.create(20930, 220, 'platform2f1');
+            piattaformeforesta1.create(21100, 350, 'platform3f1');
+            piattaformeforesta1.create(21500, 380, 'platformp3');
+            piattaformeforesta1.create(23600, 420, 'platform3f1');
+            piattaformeforesta1.setAll('body.immovable', true);
+            game.physics.arcade.enable(piattaformeforesta1);
+
+
+            //prima piattaforma dx-sx (foresta 1)
+            movingPlatformdxsx = game.add.sprite (22600,350,'2_piattaforma_franata');
+            game.physics.arcade.enable(movingPlatformdxsx);
+            movingPlatformdxsx.body.imovable = true;
+            movingPlatformdxsx.body.allowGravity = false;
+            movingPlatformdxsx.body.velocity.x =30;
+
+
+
+
+            //fiammelle separate foresta 1
+            //fiammapiccola1
+            fiammapiccola1 = game.add.sprite(10950, 430, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola1);
+            fiammapiccola1.body.collideWorldBounds = true;
+            fiammapiccola1.body.immovable = true;
+            fiammapiccola1.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola1.animations.play ('left');
+
+            //fiammapiccola2
+            fiammapiccola2 = game.add.sprite(11250, 560, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola2);
+            fiammapiccola2.body.collideWorldBounds = true;
+            fiammapiccola2.body.immovable = true;
+            fiammapiccola2.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola2.animations.play ('left');
+
+            //fiammapiccola3
+            fiammapiccola3 = game.add.sprite(15500, 560, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola3);
+            fiammapiccola3.body.collideWorldBounds = true;
+            fiammapiccola3.body.immovable = true;
+            fiammapiccola3.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola3.animations.play ('left');
+
+            //fiammapiccola4
+            fiammapiccola4 = game.add.sprite(18505, 554, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola4);
+            fiammapiccola4.body.collideWorldBounds = true;
+            fiammapiccola4.body.immovable = true;
+            fiammapiccola4.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola4.animations.play ('left');
+
+
+            //fiammapiccola6
+            fiammapiccola6 = game.add.sprite(20770, 280, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola6);
+            fiammapiccola6.body.collideWorldBounds = true;
+            fiammapiccola6.body.immovable = true;
+            fiammapiccola6.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola6.animations.play ('left');
+
+            //fiammapiccola7
+            fiammapiccola7 = game.add.sprite(21110, 280, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola7);
+            fiammapiccola7.body.collideWorldBounds = true;
+            fiammapiccola7.body.immovable = true;
+            fiammapiccola7.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola7.animations.play ('left');
+
+            //fiammapiccola8
+            fiammapiccola8 = game.add.sprite(21180, 554, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola8);
+            fiammapiccola8.body.collideWorldBounds = true;
+            fiammapiccola8.body.immovable = true;
+            fiammapiccola8.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola8.animations.play ('left');
+
+            //fiammapiccola9
+            fiammapiccola9 = game.add.sprite(21630, 554, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola9);
+            fiammapiccola9.body.collideWorldBounds = true;
+            fiammapiccola9.body.immovable = true;
+            fiammapiccola9.animations.add('left', [0,1,2], 6, true);
+            fiammapiccola9.animations.play ('left');
+
+            //fiammamedia1
+            fiammamedia1 = game.add.sprite(18910, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia1);
+            fiammamedia1.body.collideWorldBounds = true;
+            fiammamedia1.body.immovable = true;
+            fiammamedia1.animations.add('left', [2,1,0], 6, true);
+            fiammamedia1.animations.play ('left');
+
+            //fiammamedia2
+            fiammamedia2 = game.add.sprite(18999, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia2);
+            fiammamedia2.body.collideWorldBounds = true;
+            fiammamedia2.body.immovable = true;
+            fiammamedia2.animations.add('left', [2,1,0], 6, true);
+            fiammamedia2.animations.play ('left');
+
+            //fiammamedia3
+            fiammamedia3 = game.add.sprite(19320, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia3);
+            fiammamedia3.body.collideWorldBounds = true;
+            fiammamedia3.body.immovable = true;
+            fiammamedia3.animations.add('left', [2,1,0], 6, true);
+            fiammamedia3.animations.play ('left');
+
+            //fiammamedia4
+            fiammamedia4 = game.add.sprite(19420, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia4);
+            fiammamedia4.body.collideWorldBounds = true;
+            fiammamedia4.body.immovable = true;
+            fiammamedia4.animations.add('left', [2,1,0], 6, true);
+            fiammamedia4.animations.play ('left');
+
+            //fiammamedia5
+            fiammamedia5 = game.add.sprite(20220, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia5);
+            fiammamedia5.body.collideWorldBounds = true;
+            fiammamedia5.body.immovable = true;
+            fiammamedia5.animations.add('left', [2,1,0], 6, true);
+            fiammamedia5.animations.play ('left');
+
+            //fiammamedia6
+            fiammamedia6 = game.add.sprite(20280, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia6);
+            fiammamedia6.body.collideWorldBounds = true;
+            fiammamedia6.body.immovable = true;
+            fiammamedia6.animations.add('left', [2,1,0], 6, true);
+            fiammamedia6.animations.play ('left');
+
+            //fiammamedia7
+            fiammamedia7 = game.add.sprite(20600, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia7);
+            fiammamedia7.body.collideWorldBounds = true;
+            fiammamedia7.body.immovable = true;
+            fiammamedia7.animations.add('left', [2,1,0], 6, true);
+            fiammamedia7.animations.play ('left');
+
+            //fiammamedia8
+            fiammamedia8 = game.add.sprite(20800, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia8);
+            fiammamedia8.body.collideWorldBounds = true;
+            fiammamedia8.body.immovable = true;
+            fiammamedia8.animations.add('left', [2,1,0], 6, true);
+            fiammamedia8.animations.play ('left');
+
+            //fiammamedia9
+            fiammamedia9 = game.add.sprite(21340, 520, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia9);
+            fiammamedia9.body.collideWorldBounds = true;
+            fiammamedia9.body.immovable = true;
+            fiammamedia9.animations.add('left', [2,1,0], 6, true);
+            fiammamedia9.animations.play ('left');
+
+            //fiammagrande1
+            fiammagrande1 = game.add.sprite(20350, 454, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande1);
+            fiammagrande1.body.collideWorldBounds = true;
+            fiammagrande1.body.immovable = true;
+            fiammagrande1.animations.add('left', [0,1,2], 6, true);
+            fiammagrande1.animations.play ('left');
+
+            //fiammagrande2
+            fiammagrande2 = game.add.sprite(20450, 454, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande2);
+            fiammagrande2.body.collideWorldBounds = true;
+            fiammagrande2.body.immovable = true;
+            fiammagrande2.animations.add('left', [0,1,2], 6, true);
+            fiammagrande2.animations.play ('left');
+
+
+            //fiammagrande3
+            fiammagrande3 = game.add.sprite(20520, 454, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande3);
+            fiammagrande3.body.collideWorldBounds = true;
+            fiammagrande3.body.immovable = true;
+            fiammagrande3.animations.add('left', [0,1,2], 6, true);
+            fiammagrande3.animations.play ('left');
+
+            //fiammagrande4
+            fiammagrande4 = game.add.sprite(20940, 454, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande4);
+            fiammagrande4.body.collideWorldBounds = true;
+            fiammagrande4.body.immovable = true;
+            fiammagrande4.animations.add('left', [0,1,2], 6, true);
+            fiammagrande4.animations.play ('left');
+
+            //fiammagrande5
+            fiammagrande5 = game.add.sprite(21440, 454, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande5);
+            fiammagrande5.body.collideWorldBounds = true;
+            fiammagrande5.body.immovable = true;
+            fiammagrande5.animations.add('left', [0,1,2], 6, true);
+            fiammagrande5.animations.play ('left');
+
+
+            //FINE ZONA FORESTA 1
+
+
+
+
+
+
+            //INIZIO ZONA FORESTA 2
+
+            //fiamme fisse foresta 2
+            fiammablocco1f2 = game.add.sprite(26465, 514, 'fiamma1foresta2');
+            game.physics.arcade.enable(fiammablocco1f2);
+            fiammablocco1f2.body.collideWorldBounds = true;
+            fiammablocco1f2.body.immovable = true;
+            fiammablocco1f2.animations.add('left', [0,1], 6, true);
+            fiammablocco1f2.animations.play ('left');
+
+            fiammablocco2f2 = game.add.sprite(27827, 656, 'fiamma2foresta2');
+            game.physics.arcade.enable(fiammablocco2f2);
+            fiammablocco2f2.body.collideWorldBounds = true;
+            fiammablocco2f2.body.immovable = true;
+            fiammablocco2f2.animations.add('left', [0,1], 6, true);
+            fiammablocco2f2.animations.play ('left');
+
+            fiammablocco3f2 = game.add.sprite(31204, 623, 'fiamma3foresta2');
+            game.physics.arcade.enable(fiammablocco3f2);
+            fiammablocco3f2.body.collideWorldBounds = true;
+            fiammablocco3f2.body.immovable = true;
+            fiammablocco3f2.animations.add('left', [0,1], 6, true);
+            fiammablocco3f2.animations.play ('left');
+
+            fiammablocco4f2 = game.add.sprite(31558, 657, 'fiamma4foresta2');
+            game.physics.arcade.enable(fiammablocco4f2);
+            fiammablocco4f2.body.collideWorldBounds = true;
+            fiammablocco4f2.body.immovable = true;
+            fiammablocco4f2.animations.add('left', [0,1], 6, true);
+            fiammablocco4f2.animations.play ('left');
+
+
+            fiammablocco5f2 = game.add.sprite(32264, 622, 'fiamma5foresta2');
+            game.physics.arcade.enable(fiammablocco5f2);
+            fiammablocco5f2.body.collideWorldBounds = true;
+            fiammablocco5f2.body.immovable = true;
+            fiammablocco5f2.animations.add('left', [0,1], 6, true);
+            fiammablocco5f2.animations.play ('left');
+
+
+            fiammablocco6f2 = game.add.sprite(34124, 630, 'fiamma6foresta2');
+            game.physics.arcade.enable(fiammablocco6f2);
+            fiammablocco6f2.body.collideWorldBounds = true;
+            fiammablocco6f2.body.immovable = true;
+            fiammablocco6f2.animations.add('left', [0,1], 6, true);
+            fiammablocco6f2.animations.play ('left');
+
+
+            fiammablocco7f2 = game.add.sprite(36540, 537, 'fiamma7foresta2');
+            game.physics.arcade.enable(fiammablocco7f2);
+            fiammablocco7f2.body.collideWorldBounds = true;
+            fiammablocco7f2.body.immovable = true;
+            fiammablocco7f2.animations.add('left', [0,1], 6, true);
+            fiammablocco7f2.animations.play ('left');
+
+            //piani foresta 2
+            pianiforesta2 = game.add.physicsGroup();
+            pianiforesta2.create(25319, 624, 'piano1foresta2');
+            pianiforesta2.create(26226, 500, 'piano2foresta2');
+            pianiforesta2.create(26673, 494, 'piano3foresta2');
+            pianiforesta2.create(26909, 624, 'piano4foresta2');
+            pianiforesta2.create(29822, 362, 'piano5foresta2');
+            pianiforesta2.create(30060, 493, 'piano6foresta2');
+            pianiforesta2.create(30295, 625, 'piano7foresta2');
+            pianiforesta2.create(31430, 629, 'piano8foresta2');
+            pianiforesta2.create(32135, 627, 'piano9foresta2');
+            pianiforesta2.create(32495, 661, 'piano10foresta2');
+            pianiforesta2.create(33406, 400, 'piano11foresta2');
+            pianiforesta2.create(35632, 570, 'piano12foresta2');
+            pianiforesta2.setAll('body.immovable', true);
+            game.physics.arcade.enable(pianiforesta2);
+
+
+            //piattaforme foresta 2 (ferme)
+            piattaformeforesta2 = game.add.physicsGroup();
+            piattaformeforesta2.create(27940, 620, 'piattaforma1foresta2');
+            piattaformeforesta2.create(28540, 460, 'piattaforma4foresta2');
+            piattaformeforesta2.create(28870, 260, 'piattaforma5foresta2');
+            piattaformeforesta2.create(35200, 520, 'piattaforma13foresta2');
+            piattaformeforesta2.create(36450, 450, 'piattaforma13foresta2');
+            piattaformeforesta2.create(36900, 330, 'piattaforma10foresta2');
+            piattaformeforesta2.setAll('body.immovable', true);
+            game.physics.arcade.enable(piattaformeforesta2);
+
+
+            //prima piattaforma su e giù (zona foresta 2)
+            movingPlatform1f2 = game.add.sprite (29530, 290, 'piattaforma7foresta2');
+            game.physics.arcade.enable(movingPlatform1f2);
+            movingPlatform1f2.body.imovable = true;
+            movingPlatform1f2.body.allowGravity = false;
+            movingPlatform1f2.body.velocity.y = 20;
+
+
+            //seconda piattaforma su e giù (zona foresta 2)
+            movingPlatform2f2 = game.add.sprite (34250, 400, 'piattaforma9foresta2');
+            game.physics.arcade.enable(movingPlatform2f2);
+            movingPlatform2f2.body.imovable = true;
+            movingPlatform2f2.body.allowGravity = false;
+            movingPlatform2f2.body.velocity.y = 20;
+
+
+            //fiammelle separate foresta 2
+            //fiammapiccola1f2
+            fiammapiccola1f2 = game.add.sprite(25800, 554, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola1f2);
+            fiammapiccola1f2.body.collideWorldBounds = true;
+            fiammapiccola1f2.body.immovable = true;
+            fiammapiccola1f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola1f2.animations.play ('left');
+
+            //fiammapiccola2f2
+            fiammapiccola2f2 = game.add.sprite(25900, 554, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola2f2);
+            fiammapiccola2f2.body.collideWorldBounds = true;
+            fiammapiccola2f2.body.immovable = true;
+            fiammapiccola2f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola2f2.animations.play ('left');
+
+            //fiammapiccola3f2
+            fiammapiccola3f2 = game.add.sprite(26000, 554, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola3f2);
+            fiammapiccola3f2.body.collideWorldBounds = true;
+            fiammapiccola3f2.body.immovable = true;
+            fiammapiccola3f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola3f2.animations.play ('left');
+
+            //fiammapiccola4f2
+            fiammapiccola4f2 = game.add.sprite(27960, 550, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola4f2);
+            fiammapiccola4f2.body.collideWorldBounds = true;
+            fiammapiccola4f2.body.immovable = true;
+            fiammapiccola4f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola4f2.animations.play ('left');
+
+
+            //fiammapiccola5f2
+            fiammapiccola5f2 = game.add.sprite(29160, 190, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola5f2);
+            fiammapiccola5f2.body.collideWorldBounds = true;
+            fiammapiccola5f2.body.immovable = true;
+            fiammapiccola5f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola5f2.animations.play ('left');
+
+
+            //fiammapiccola6f2
+            fiammapiccola6f2 = game.add.sprite(31450, 549, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola6f2);
+            fiammapiccola6f2.body.collideWorldBounds = true;
+            fiammapiccola6f2.body.immovable = true;
+            fiammapiccola6f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola6f2.animations.play ('left');
+
+
+            //fiammapiccola7f2
+            fiammapiccola7f2 = game.add.sprite(34780, 490, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola7f2);
+            fiammapiccola7f2.body.collideWorldBounds = true;
+            fiammapiccola7f2.body.immovable = true;
+            fiammapiccola7f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola7f2.animations.play ('left');
+
+
+            //fiammapiccola8f2
+            fiammapiccola8f2 = game.add.sprite(36910, 255, 'fiammapiccola');
+            game.physics.arcade.enable(fiammapiccola8f2);
+            fiammapiccola8f2.body.collideWorldBounds = true;
+            fiammapiccola8f2.body.immovable = true;
+            fiammapiccola8f2.animations.add('left', [0,1,2], 10, true);
+            fiammapiccola8f2.animations.play ('left');
+
+            //fiammamedia1f2
+            fiammamedia1f2 = game.add.sprite(33680, 160, 'fiammamedia');
+            game.physics.arcade.enable(fiammamedia1f2);
+            fiammamedia1f2.body.collideWorldBounds = true;
+            fiammamedia1f2.body.immovable = true;
+            fiammamedia1f2.animations.add('left', [2,1,0], 6, true);
+            fiammamedia1f2.animations.play ('left');
+
+            //fiammagrande1f2
+            fiammagrande1f2 = game.add.sprite(27100, 430, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande1f2);
+            fiammagrande1f2.body.collideWorldBounds = true;
+            fiammagrande1f2.body.immovable = true;
+            fiammagrande1f2.animations.add('left', [0,1,2], 10, true);
+            fiammagrande1f2.animations.play ('left');
+
+
+              //fiammagrande2f2
+            fiammagrande2f2 = game.add.sprite(35720, 223, 'fiammagrande');
+            game.physics.arcade.enable(fiammagrande2f2);
+            fiammagrande2f2.body.collideWorldBounds = true;
+            fiammagrande2f2.body.immovable = true;
+            fiammagrande2f2.animations.add('left', [0,1,2], 10, true);
+            fiammagrande2f2.animations.play ('left');
+
+
+
+            //ROCCIA BECCACCINO
+            rocce = game.add.physicsGroup();
+            rocce.create(37120, 600, 'roccia1');
+            rocce.create(37210, 531, 'roccia2');
+            rocce.create(37170, 445, 'roccia3');
+            rocce.setAll('body.immovable', true);
+            game.physics.arcade.enable(rocce);
+
+            //beccaccino animazione
+            beccaccino = game.add.sprite(37150, 233, 'beccaccio');
+            game.physics.arcade.enable(beccaccino);
+            beccaccino.body.collideWorldBounds = true;
+            beccaccino.body.immovable = true;
+            beccaccino.animations.add('cry', [0,1,2], 3, true);
+            beccaccino.animations.play ('cry');
+            beccaccino.width = 200;
+            beccaccino.height = 250;
+
+
+            //FINE ZONA FORESTA 2
+
+            //GAMEOVER
+            //schermata gameover
+            schermata_gameover = game.add.sprite(0, 0, 'gameover');
+            game.physics.arcade.enable(schermata_gameover);
+            schermata_gameover.fixedToCamera= true;
+            schermata_gameover.visible= false;
+
+            //ritorno a copertina
+            icona_home = game.add.sprite(890, 660, 'iconahome');
+            game.physics.arcade.enable(icona_home);
+            icona_home.fixedToCamera= true;
+            icona_home.visible= false;
+            icona_home.inputEnabled=true;
+            icona_home.events.onInputDown.add(function(){window.location.href='index.html'});
+
+            //ricomincio il gioco
+            icona_play = game.add.sprite(775, 660, 'iconaplaypiccola');
+            game.physics.arcade.enable(icona_play);
+            icona_play.fixedToCamera= true;
+            icona_play.visible= false;
+            icona_play.inputEnabled= true;
+            icona_play.events.onInputDown.add(function(){window.location.href='ROCCIOSO.html'});
+
+            //VITTORIA
+            //schermata vittoria
+            schermata_vittoria = game.add.sprite(0, 0, 'vittoria');
+            game.physics.arcade.enable(schermata_vittoria);
+            schermata_vittoria.fixedToCamera= true;
+            schermata_vittoria.visible= false;
+
+            //ritorno a copertina
+            icona_home_v = game.add.sprite(890, 660, 'iconahome');
+            game.physics.arcade.enable(icona_home_v);
+            icona_home_v.fixedToCamera= true;
+            icona_home_v.visible= false;
+            icona_home_v.inputEnabled=true;
+            icona_home_v.events.onInputDown.add(function(){window.location.href='index.html'});
+
+            //ricomincio il gioco
+            icona_play_v = game.add.sprite(775, 660, 'iconaplaypiccola');
+            game.physics.arcade.enable(icona_play_v);
+            icona_play_v.fixedToCamera= true;
+            icona_play_v.visible= false;
+            icona_play_v.inputEnabled= true;
+            icona_play_v.events.onInputDown.add(function(){window.location.href='ROCCIOSO.html'});
+
+            //CAMERA
+            this.camera.follow(player);
+  };
+
+
+
+        function update () {
+
+          //collisione player - piattaforme roccioso
+            game.physics.arcade.collide(player, platforms);
+
+
+            //collisione player - piattaforme palude
+            game.physics.arcade.collide(player, piattaforme);
+
+
+            //collisione player - acqua 1
+            game.physics.arcade.collide(player, acqua1, muori1);
+            function muori1(a,b) {
+              game.camera.shake(0.03, 500);
+              a.kill();
+              lives-=1;
+              livesCrop.width = lives * livesIcon;
+              livesCounter.updateCrop();
+              game.time.events.add(2000, function() {
+                player.revive();
+                player.x = 10850;
+                player.y = 350;
+              })
+            };
+
+
+
+            //collisione player - acqua 2
+            game.physics.arcade.collide(player, acqua2, muori2);
+            function muori2(a,b) {
+              game.camera.shake(0.03, 500);
+              a.kill();
+              lives-=1;
+              livesCrop.width = lives * livesIcon;
+              livesCounter.updateCrop();
+              game.time.events.add(2000, function() {
+                player.revive();
+                player.x = 11636;
+                player.y = 490;
+              })
+            };
+
+
+            //collisione player - acqua 3
+            game.physics.arcade.collide(player, acqua3, muori3);
+            function muori3(a,b) {
+              game.camera.shake(0.03, 500);
+              a.kill();
+              lives-=1;
+              livesCrop.width = lives * livesIcon;
+              livesCounter.updateCrop();
+              game.time.events.add(2000, function() {
+                player.revive();
+                player.x = 13448;
+                player.y = 320;
+              })
+            };
+
+
+            //collisione player - acqua 4
+            game.physics.arcade.collide(player, acqua4, muori4);
+            function muori4(a,b) {
+              game.camera.shake(0.03, 500);
+              a.kill();
+              lives-=1;
+              livesCrop.width = lives * livesIcon;
+              livesCounter.updateCrop();
+              game.time.events.add(2000, function() {
+                player.revive();
+                player.x = 15001;
+                player.y = 420;
+              })
+            };
+
+
+            //collisione player - acqua 5
+            game.physics.arcade.collide(player, acqua5, muori5);
+            function muori5(a,b) {
+              game.camera.shake(0.03, 500);
+              a.kill();
+              lives-=1;
+              livesCrop.width = lives * livesIcon;
+              livesCounter.updateCrop();
+              game.time.events.add(2000, function() {
+                player.revive();
+                player.x = 15998;
+                player.y = 500;
+              })
+            };
+
+
+            //collisione player - piattaforme foresta 1
+            game.physics.arcade.collide(player, piattaformeforesta1);
+
+
+            //collisione player piattaforme foresta 2
+            game.physics.arcade.collide(player, piattaformeforesta2);
+
+            // collisione player - palloncini rossi (una vita va nel contatore)
+            game.physics.arcade.collide(player, pallonciniVite, function(a,b) {
+            b.kill();
+            if (lives<3 && lives>0) {
+            lives += 1;
+            livesCrop.width = lives * livesIcon;
+            livesCounter.updateCrop();
+          }
+            });
+
+
+            // collisione player - palloncino azzurri 01 (gocce acqua)
+            game.physics.arcade.collide(player, palloncinoacqua1, function(a,b) {
+            b.kill();
+            if (drops<12 && drops> -1) {
+            drops += 3;
+            dropsCrop.width = drops * dropsIcon;
+            dropsCounter.updateCrop();
+          }
+            });
+
+            palloncinoacqua1.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+            palloncinoacqua1.reset(24670,286);
+          })
+          });
+
+
+          // collisione player - palloncino azzurri 02 (gocce acqua)
+          game.physics.arcade.collide(player, palloncinoacqua2, function(a,b) {
+          b.kill();
+          if (drops<12 && drops> -1) {
+          drops += 3;
+          dropsCrop.width = drops * dropsIcon;
+          dropsCounter.updateCrop();
+          }
+          });
+
+          palloncinoacqua2.events.onKilled.add(function() {
+          game.time.events.add (5000, function(){
+          palloncinoacqua2.reset(26180,205);
+          })
+          });
+
+          // collisione player - palloncino azzurri 03 (gocce acqua)
+          game.physics.arcade.collide(player, palloncinoacqua3, function(a,b) {
+          b.kill();
+          if (drops<12 && drops> -1) {
+          drops += 3;
+          dropsCrop.width = drops * dropsIcon;
+          dropsCounter.updateCrop();
+        }
+          });
+
+          palloncinoacqua3.events.onKilled.add(function() {
+          game.time.events.add (5000, function(){
+          palloncinoacqua3.reset(27705,300);
+        })
+        });
+
+
+        // collisione player - palloncino azzurri 04 (gocce acqua)
+        game.physics.arcade.collide(player, palloncinoacqua4, function(a,b) {
+        b.kill();
+        if (drops<12 && drops> -1) {
+        drops += 3;
+        dropsCrop.width = drops * dropsIcon;
+        dropsCounter.updateCrop();
+        }
+        });
+
+        palloncinoacqua4.events.onKilled.add(function() {
+        game.time.events.add (5000, function(){
+        palloncinoacqua4.reset(30560,288);
+        })
+        });
+
+        // collisione player - palloncino azzurri 05 (gocce acqua)
+        game.physics.arcade.collide(player, palloncinoacqua5, function(a,b) {
+        b.kill();
+        if (drops<12 && drops> -1) {
+        drops += 3;
+        dropsCrop.width = drops * dropsIcon;
+        dropsCounter.updateCrop();
+      }
+        });
+
+        palloncinoacqua5.events.onKilled.add(function() {
+        game.time.events.add (5000, function(){
+        palloncinoacqua5.reset(33480,100);
+      })
+      });
+
+
+      // collisione player - palloncino azzurri 06 (gocce acqua)
+      game.physics.arcade.collide(player, palloncinoacqua6, function(a,b) {
+      b.kill();
+      if (drops<12 && drops> -1) {
+      drops += 3;
+      dropsCrop.width = drops * dropsIcon;
+      dropsCounter.updateCrop();
+      }
+      });
+
+      palloncinoacqua6.events.onKilled.add(function() {
+      game.time.events.add (5000, function(){
+      palloncinoacqua6.reset(34025,65);
+      })
+      });
+
+
+
+            // collisione player - palloncino azzurri 07 (gocce acqua)
+            game.physics.arcade.collide(player, palloncinoacqua7, function(a,b) {
+            b.kill();
+            if (drops<12 && drops> -1) {
+            drops += 3;
+            dropsCrop.width = drops * dropsIcon;
+            dropsCounter.updateCrop();
+            }
+            });
+
+            palloncinoacqua7.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+            palloncinoacqua7.reset(35250,100);
+            })
+            });
+
+
+            // collisione player - floor (perde una vita)
+            game.physics.arcade.collide(player, fittizia, function(a,b) {
+            a.kill()
+            if (k==0) {
+            a.kill();
+            }
+
+            else if (1<k<3) {
+            player.x = 6650;
+            k-=1;
+            //vite.getFirtstAlive.().kill();
+            }
+            });
+
+
+
+
+            //collisione player - palloncini giall01 (superpotere salto)
+            game.physics.arcade.collide(player, salto1, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto1.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+            salto1.reset(4200,450);
+          })
+          });
+
+            //collisione player - palloncini giall02 (superpotere salto)
+            game.physics.arcade.collide(player, salto2, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto2.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+              salto2.reset(7100, 300);
+            })
+            });
+
+            //collisione player - palloncini giall03 (superpotere salto)
+            game.physics.arcade.collide(player, salto3, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto3.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+            salto3.reset(12500,320);
+          })
+          });
+
+            //collisione player - palloncini giall04 (superpotere salto)
+            game.physics.arcade.collide(player, salto4, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto4.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+              salto4.reset(12900, 500);
+            })
+            });
+
+            //collisione player - palloncini giall05 (superpotere salto1)
+            game.physics.arcade.collide(player, salto5, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto5.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+            salto5.reset(16100,300);
+          })
+          });
+
+            //collisione player - palloncini giall06 (superpotere salto)
+            game.physics.arcade.collide(player, salto6, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto6.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+              salto6.reset(20960, 40);
+            })
+            });
+
+            //collisione player - palloncini giall07 (superpotere salto1)
+            game.physics.arcade.collide(player, salto7, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto7.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+            salto7.reset(28660,270);
+          })
+          });
+
+            //collisione player - palloncini giall08 (superpotere salto)
+            game.physics.arcade.collide(player, salto8, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto8.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+              salto8.reset(33150, 507);
+            })
+            });
+
+
+
+            //collisione player - palloncini giall09 (superpotere salto)
+            game.physics.arcade.collide(player, salto9, saltare);
+            function saltare(a,b) {
+            b.kill();
+            iconapalloncino.visible = true;
+            game.time.events.add (3000, function(){
+              iconapalloncino.visible = false;
+            });
+            player.body.gravity.y = 280;
+            game.time.events.add(3000, function() {
+            player.body.gravity.y = 620;
+            })
+            };
+
+            salto9.events.onKilled.add(function() {
+            game.time.events.add (5000, function(){
+              salto9.reset(35250, 420);
+            })
+            });
+
+
+
+
+            //collisione player - piani roccioso
+            game.physics.arcade.collide(player, percorsi);
+
+
+            //collisione player - piani palude
+            game.physics.arcade.collide(player, pianipalude);
+
+
+            //collisione player - piani foresta 1
+            game.physics.arcade.collide(player, pianiforesta1);
+
+
+            //collisione player - piani foresta 2
+            game.physics.arcade.collide(player, pianiforesta2);
+
+
+            //collisione player - ninfee
+            game.physics.arcade.collide(player, ninfee);
+
+            // collisione player - fittizia 1
+            game.physics.arcade.collide(player, fittizia1, mortevuoto1);
+            function mortevuoto1(a,b) {
+                game.camera.shake(0.03, 500);
+                a.kill();
+                lives-=1;
+                livesCrop.width = lives * livesIcon;
+                livesCounter.updateCrop();
+                game.time.events.add(2000, function() {
+                  player.revive();
+                  player.x = 1580;
+                  player.y = 540;
+                })
+              };
+
+
+              // collisione player - fittizia 2
+              game.physics.arcade.collide(player, fittizia2, mortevuoto2);
+              function mortevuoto2(a,b) {
+                  game.camera.shake(0.03, 500);
+                  a.kill();
+                  lives-=1;
+                  livesCrop.width = lives * livesIcon;
+                  livesCounter.updateCrop();
+                  game.time.events.add(2000, function() {
+                    player.revive();
+                    player.x = 3072;
+                    player.y = 340;
+                  })
+                };
+
+
+                // collisione player - fittizia 3
+                game.physics.arcade.collide(player, fittizia3, mortevuoto3);
+                function mortevuoto3(a,b) {
+                    game.camera.shake(0.03, 500);
+                    a.kill();
+                    lives-=1;
+                    livesCrop.width = lives * livesIcon;
+                    livesCounter.updateCrop();
+                    game.time.events.add(2000, function() {
+                      player.revive();
+                      player.x = 3760;
+                      player.y = 540;
+                    })
+                  };
+
+
+                  // collisione player - fittizia 4
+                  game.physics.arcade.collide(player, fittizia4, mortevuoto4);
+                  function mortevuoto4(a,b) {
+                      game.camera.shake(0.03, 500);
+                      a.kill();
+                      lives-=1;
+                      livesCrop.width = lives * livesIcon;
+                      livesCounter.updateCrop();
+                      game.time.events.add(2000, function() {
+                        player.revive();
+                        player.x = 5880;
+                        player.y = 460;
+                      })
+                    };
+
+
+                    // collisione player - fittizia 5
+                    game.physics.arcade.collide(player, fittizia5, mortevuoto5);
+                    function mortevuoto5(a,b) {
+                        game.camera.shake(0.03, 500);
+                        a.kill();
+                        lives-=1;
+                        livesCrop.width = lives * livesIcon;
+                        livesCounter.updateCrop();
+                        game.time.events.add(2000, function() {
+                          player.revive();
+                          player.x = 7923;
+                          player.y = 540;
+                        })
+                      };
+
+
+
+                      // collisione player - bloccofiamme1
+                      game.physics.arcade.collide(player, fiammablocco1f1, mortefiamme1);
+                      function mortefiamme1(a,b) {
+                          game.camera.shake(0.03, 500);
+                          a.kill();
+                          lives-=1;
+                          livesCrop.width = lives * livesIcon;
+                          livesCounter.updateCrop();
+                          game.time.events.add(2000, function() {
+                            player.revive();
+                            player.x = 23168;
+                            player.y = 280;
+                          })
+                        };
+
+
+                        // collisione player - bloccofiamme2
+                        game.physics.arcade.collide(player, fiammablocco2f1, mortefiamme2);
+                        function mortefiamme2(a,b) {
+                            game.camera.shake(0.03, 500);
+                            a.kill();
+                            lives-=1;
+                            livesCrop.width = lives * livesIcon;
+                            livesCounter.updateCrop();
+                            game.time.events.add(2000, function() {
+                              player.revive();
+                              player.x = 23168;
+                              player.y = 280;
+                            })
+                          };
+
+
+                          // collisione player - bloccofiamme1 foresta 2
+                          game.physics.arcade.collide(player, fiammablocco1f2, mortefiamme3);
+                          function mortefiamme3(a,b) {
+                              game.camera.shake(0.03, 500);
+                              a.kill();
+                              lives-=1;
+                              livesCrop.width = lives * livesIcon;
+                              livesCounter.updateCrop();
+                              game.time.events.add(2000, function() {
+                                player.revive();
+                                player.x = 26360;
+                                player.y = 410;
+                              })
+                            };
+
+
+                            // collisione player - bloccofiamme2 foresta 2
+                            game.physics.arcade.collide(player, fiammablocco2f2, mortefiamme4);
+                            function mortefiamme4(a,b) {
+                                game.camera.shake(0.03, 500);
+                                a.kill();
+                                lives-=1;
+                                livesCrop.width = lives * livesIcon;
+                                livesCounter.updateCrop();
+                                game.time.events.add(2000, function() {
+                                  player.revive();
+                                  player.x = 28540;
+                                  player.y = 220;
+                                })
+                              };
+
+
+                              // collisione player - bloccofiamme3 foresta 2
+                              game.physics.arcade.collide(player, fiammablocco3f2, mortefiamme5);
+                              function mortefiamme5(a,b) {
+                                  game.camera.shake(0.03, 500);
+                                  a.kill();
+                                  lives-=1;
+                                  livesCrop.width = lives * livesIcon;
+                                  livesCounter.updateCrop();
+                                  game.time.events.add(2000, function() {
+                                    player.revive();
+                                    player.x = 31030;
+                                    player.y = 540;
+                                  })
+                                };
+
+
+                                // collisione player - bloccofiamme4 foresta 2
+                                game.physics.arcade.collide(player, fiammablocco4f2, mortefiamme6);
+                                function mortefiamme6(a,b) {
+                                    game.camera.shake(0.03, 500);
+                                    a.kill();
+                                    lives-=1;
+                                    livesCrop.width = lives * livesIcon;
+                                    livesCounter.updateCrop();
+                                    game.time.events.add(2000, function() {
+                                      player.revive();
+                                      player.x = 32135;
+                                      player.y = 540;
+                                    })
+                                  };
+
+
+                                  // collisione player - bloccofiamme5 foresta 2
+                                  game.physics.arcade.collide(player, fiammablocco5f2, mortefiamme7);
+                                  function mortefiamme7(a,b) {
+                                      game.camera.shake(0.03, 500);
+                                      a.kill();
+                                      lives-=1;
+                                      livesCrop.width = lives * livesIcon;
+                                      livesCounter.updateCrop();
+                                      game.time.events.add(2000, function() {
+                                        player.revive();
+                                        player.x = 32200;
+                                        player.y = 400;
+                                      })
+                                    };
+
+
+                                    // collisione player - bloccofiamme6 foresta 2
+                                    game.physics.arcade.collide(player, fiammablocco6f2, mortefiamme8);
+                                    function mortefiamme8(a,b) {
+                                        game.camera.shake(0.03, 500);
+                                        a.kill();
+                                        lives-=1;
+                                        livesCrop.width = lives * livesIcon;
+                                        livesCounter.updateCrop();
+                                        game.time.events.add(2000, function() {
+                                          player.revive();
+                                          player.x = 35200;
+                                          player.y = 440;
+                                        })
+                                      };
+
+
+                                      // collisione player - bloccofiamme7 foresta 2
+                                      game.physics.arcade.collide(player, fiammablocco7f2, mortefiamme9);
+                                      function mortefiamme9(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 36380;
+                                            player.y = 290;
+                                          })
+                                        };
+
+                                        //collisione player prima fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia1, mortefiammemedie1);
+                                        function mortefiammemedie1(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 18690;
+                                            player.y = 300;
+                                          })
+                                        };
+
+
+                                        //collisione player seconda fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia2, mortefiammemedie2);
+                                        function mortefiammemedie2(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 18690;
+                                            player.y = 300;
+                                          })
+                                        };
+
+
+                                        //collisione player terza fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia3, mortefiammemedie3);
+                                        function mortefiammemedie3(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 18690;
+                                            player.y = 300;
+                                          })
+                                        };
+
+
+                                        //collisione player quarta fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia4, mortefiammemedie4);
+                                        function mortefiammemedie4(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 18690;
+                                            player.y = 300;
+                                          })
+                                        };
+
+
+                                        //collisione player quinta fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia5, mortefiammemedie5);
+                                        function mortefiammemedie5(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player sesta fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia6, mortefiammemedie6);
+                                        function mortefiammemedie6(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player settima fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia7, mortefiammemedie7);
+                                        function mortefiammemedie7(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player ottava fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia8, mortefiammemedie8);
+                                        function mortefiammemedie8(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player nona fiamma media
+                                        game.physics.arcade.collide(player, fiammamedia9, mortefiammemedie9);
+                                        function mortefiammemedie9(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 21600;
+                                            player.y = 200;
+                                          })
+                                        };
+
+
+                                        //collisione player prima fiamma grande
+                                        game.physics.arcade.collide(player, fiammagrande1, mortefiammegrandi1);
+                                        function mortefiammegrandi1(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player seconda fiamma grande
+                                        game.physics.arcade.collide(player, fiammagrande2, mortefiammegrandi2);
+                                        function mortefiammegrandi2(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player terza fiamma grande
+                                        game.physics.arcade.collide(player, fiammagrande3, mortefiammegrandi3);
+                                        function mortefiammegrandi3(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player quarta fiamma grande
+                                        game.physics.arcade.collide(player, fiammagrande4, mortefiammegrandi4);
+                                        function mortefiammegrandi4(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione player quinta fiamma grande
+                                        game.physics.arcade.collide(player, fiammagrande5, mortefiammegrandi5);
+                                        function mortefiammegrandi5(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 21600;
+                                            player.y = 200;
+                                          })
+                                        };
+
+
+                                        //collisione player prima fiamma grande f2
+                                        game.physics.arcade.collide(player, fiammagrande1f2, mortefiammegrandi6);
+                                        function mortefiammegrandi6(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 27300;
+                                            player.y = 540;
+                                          })
+                                        };
+
+
+                                        //collisione player prima fiamma media f2
+                                        game.physics.arcade.collide(player, fiammamedia1f2, mortefiammemedie1f2);
+                                        function mortefiammemedie1f2(a,b) {
+                                          game.camera.shake(0.02, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 33500;
+                                            player.y = 300;
+                                          })
+                                        };
+
+
+                                        //collisione player seconda fiamma grande f2
+                                        game.physics.arcade.collide(player, fiammagrande2f2, mortefiammegrandi7);
+                                        function mortefiammegrandi7(a,b) {
+                                          game.camera.shake(0.03, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 35960;
+                                            player.y = 470;
+                                          })
+                                        };
+
+                                        //contatore fiammaboss
+
+                                        if (cfb==4){
+                                        game.physics.arcade.overlap(fiammagrande2f2, goccialanciata.bullets, killfiammagrande2f2);
+                                        function killfiammagrande2f2 (a,b) {
+                                          a.scale.setTo(0.8, 0.8);
+                                          b.kill();
+                                          cfb-=1;
+                                          fiammagrande2f2.x=35720;
+                                          fiammagrande2f2.y= 290;
+                                        };};
+                                         if (cfb==3){
+                                         game.physics.arcade.overlap(fiammagrande2f2, goccialanciata.bullets, killfiammagrande2f2);
+                                         function killfiammagrande2f2 (a,b) {
+                                           a.scale.setTo(0.7, 0.7);
+                                           b.kill();
+                                           cfb-=1;
+                                           fiammagrande2f2.x=35730;
+                                           fiammagrande2f2.y= 320;
+                                         };};
+
+                                         if (cfb==2){
+                                         game.physics.arcade.overlap(fiammagrande2f2, goccialanciata.bullets, killfiammagrande2f2);
+                                         function killfiammagrande2f2 (a,b) {
+                                           a.scale.setTo(0.5, 0.5);
+                                           b.kill();
+                                           cfb-=1;
+                                           fiammagrande2f2.x=35730;
+                                           fiammagrande2f2.y= 390;
+                                         };};
+
+                                         if (cfb==1){
+                                         game.physics.arcade.overlap(fiammagrande2f2, goccialanciata.bullets, killfiammagrande2f2);
+                                         function killfiammagrande2f2 (a,b) {
+                                           a.kill();
+                                           b.kill();
+                                           cfb+=3;
+                                         }; };
+
+
+
+                                        //collisione con fiammapiccola1f2
+                                            game.physics.arcade.collide(player, fiammapiccola1f2, bruciatofiammapiccola1f2);
+                                            function bruciatofiammapiccola1f2 (a,b) {
+                                              game.camera.shake(0.01, 500);
+                                              a.kill();
+                                              lives-=1;
+                                              livesCrop.width = lives * livesIcon;
+                                              livesCounter.updateCrop();
+                                              game.time.events.add(2000, function() {
+                                                player.revive();
+                                                player.x = 25600;
+                                                player.y = 540;
+                                              })
+                                            };
+
+
+                                            //collisione con fiammapiccola2f2
+                                                game.physics.arcade.collide(player, fiammapiccola2f2, bruciatofiammapiccola2f2);
+                                                function bruciatofiammapiccola2f2 (a,b) {
+                                                  game.camera.shake(0.01, 500);
+                                                  a.kill();
+                                                  lives-=1;
+                                                  livesCrop.width = lives * livesIcon;
+                                                  livesCounter.updateCrop();
+                                                  game.time.events.add(2000, function() {
+                                                    player.revive();
+                                                    player.x = 25600;
+                                                    player.y = 540;
+                                                  })
+                                                };
+
+
+                                                //collisione con fiammapiccola3f2
+                                                    game.physics.arcade.collide(player, fiammapiccola3f2, bruciatofiammapiccola3f2);
+                                                    function bruciatofiammapiccola3f2 (a,b) {
+                                                      game.camera.shake(0.01, 500);
+                                                      a.kill();
+                                                      lives-=1;
+                                                      livesCrop.width = lives * livesIcon;
+                                                      livesCounter.updateCrop();
+                                                      game.time.events.add(2000, function() {
+                                                        player.revive();
+                                                        player.x = 25600;
+                                                        player.y = 540;
+                                                      })
+                                                    };
+
+
+                                                    //collisione con fiammapiccola4f2
+                                                        game.physics.arcade.collide(player, fiammapiccola4f2, bruciatofiammapiccola4f2);
+                                                        function bruciatofiammapiccola4f2 (a,b) {
+                                                          game.camera.shake(0.01, 500);
+                                                          a.kill();
+                                                          lives-=1;
+                                                          livesCrop.width = lives * livesIcon;
+                                                          livesCounter.updateCrop();
+                                                          game.time.events.add(2000, function() {
+                                                            player.revive();
+                                                            player.x = 27600;
+                                                            player.y = 100;
+                                                          })
+                                                        };
+
+
+                                                        //collisione con fiammapiccola5f2
+                                                            game.physics.arcade.collide(player, fiammapiccola5f2, bruciatofiammapiccola5f2);
+                                                            function bruciatofiammapiccola5f2 (a,b) {
+                                                              game.camera.shake(0.01, 500);
+                                                              a.kill();
+                                                              lives-=1;
+                                                              livesCrop.width = lives * livesIcon;
+                                                              livesCounter.updateCrop();
+                                                              game.time.events.add(2000, function() {
+                                                                player.revive();
+                                                                player.x = 28870;
+                                                                player.y = 180;
+                                                              })
+                                                            };
+
+                                                            //collisione con fiammapiccola6f2
+                                                                game.physics.arcade.collide(player, fiammapiccola6f2, bruciatofiammapiccola6f2);
+                                                                function bruciatofiammapiccola6f2 (a,b) {
+                                                                  game.camera.shake(0.01, 500);
+                                                                  a.kill();
+                                                                  lives-=1;
+                                                                  livesCrop.width = lives * livesIcon;
+                                                                  livesCounter.updateCrop();
+                                                                  game.time.events.add(2000, function() {
+                                                                    player.revive();
+                                                                    player.x = 31100;
+                                                                    player.y = 400;
+                                                                  })
+                                                                };
+
+
+                                                                //collisione con fiammapiccola7f2
+                                                                    game.physics.arcade.collide(player, fiammapiccola7f2, bruciatofiammapiccola7f2);
+                                                                    function bruciatofiammapiccola7f2 (a,b) {
+                                                                      game.camera.shake(0.01, 500);
+                                                                      a.kill();
+                                                                      lives-=1;
+                                                                      livesCrop.width = lives * livesIcon;
+                                                                      livesCounter.updateCrop();
+                                                                      game.time.events.add(2000, function() {
+                                                                        player.revive();
+                                                                        player.x = 35200;
+                                                                        player.y = 400;
+                                                                      })
+                                                                    };
+
+
+                                                                    //collisione con fiammapiccola8f2
+                                                                        game.physics.arcade.collide(player, fiammapiccola8f2, bruciatofiammapiccola8f2);
+                                                                        function bruciatofiammapiccola8f2 (a,b) {
+                                                                          game.camera.shake(0.01, 500);
+                                                                          a.kill();
+                                                                          lives-=1;
+                                                                          livesCrop.width = lives * livesIcon;
+                                                                          livesCounter.updateCrop();
+                                                                          game.time.events.add(2000, function() {
+                                                                            player.revive();
+                                                                            player.x = 36450;
+                                                                            player.y = 370;
+                                                                          })
+                                                                        };
+
+
+
+
+
+
+            //player incontra bandierina arancione e diventa verde (checkpoint)
+          //  game.physics.arcade.collide(player, checkpoints, cambiaColore);
+          //  function cambiaColore(a,b) {
+            //b.kill();
+          //  };
+
+
+            //collisione con Floor
+            game.physics.arcade.collide(player, fittizia, gestisciCollisione3);
+            function gestisciCollisione3 (a,b) {
+            a.kill();
+            };
+
+            //collisione con beccaccio
+            game.physics.arcade.collide(player, beccaccino, haivinto);
+            function haivinto (a,b) {
+              game.camera.shake(0.01, 100);
+              schermata_gameover.visible = false;
+              game.time.events.add(1000, function() {
+                beccaccino.kill();
+                schermata_gameover.visible = false;
+                schermata_vittoria.visible = true;
+                icona_home_v.visible= true;
+                icona_play_v.visible = true;
+              })
+
+            };
+
+            //collisione con roccia beccaccio
+            game.physics.arcade.collide(player, rocce);
+
+            //velocità iniziale giocatore
+            player.body.velocity.x = 0;
+
+
+
+            //piattaforme cadono solo in giù quando toccate
+            game.physics.arcade.collide(player, platformsgiù, gestisciCollisione2);
+            function gestisciCollisione2 (a,b) {
+            b.body.imovable=false;
+            b.body.collideWorldBounds = false;
+            game.time.events.add(4000, function() {
+              b.kill();
+            })
+          };
+
+
+            //collisione player - prima piattaforma su e giù (zona rocciosa)
+            game.physics.arcade.collide(player, movingPlatform);
+
+            if (movingPlatform.y > 400) {
+              movingPlatform.body.velocity.y = -20;
+              }
+              else if (movingPlatform.y < 300) {
+              movingPlatform.body.velocity.y = 20;
+              }
+
+
+            //collisione player - seconda piattaforma su e giù (zona rocciosa)
+            game.physics.arcade.collide(player, movingPlatform2r);
+
+              if (movingPlatform2r.y > 400) {
+                movingPlatform2r.body.velocity.y = -20;
+                }
+                else if (movingPlatform2r.y < 300) {
+                movingPlatform2r.body.velocity.y = 20;
+                }
+
+
+            //collisione player - prima piattaforma su e giù (palude)
+            game.physics.arcade.collide(player, movingPlatform1p);
+
+              if (movingPlatform1p.y > 470) {
+                movingPlatform1p.body.velocity.y = -20;
+                }
+                else if (movingPlatform1p.y < 420) {
+                movingPlatform1p.body.velocity.y = 20;
+                }
+
+
+                //collisione player - seconda piattaforma su e giù (palude)
+                game.physics.arcade.collide(player, movingPlatform2p);
+
+                  if (movingPlatform2p.y > 400) {
+                    movingPlatform2p.body.velocity.y = -20;
+                    }
+                    else if (movingPlatform2p.y < 340) {
+                    movingPlatform2p.body.velocity.y = 20;
+                    }
+
+
+
+            //collisione player - prima piattaforma dx-sx (palude)
+            game.physics.arcade.collide(player, movingPlatformdxsxp2);
+
+              if (movingPlatformdxsxp2.x > 10620 ) {
+              movingPlatformdxsxp2.body.velocity.x = -20;
+              }
+              else if (movingPlatformdxsxp2.x < 10500) {
+              movingPlatformdxsxp2.body.velocity.x = 20;
+              }
+
+
+            //collisione player - prima piattaforma dx-sx (foresta 1)
+            game.physics.arcade.collide(player, movingPlatformdxsx);
+
+            if (movingPlatformdxsx.x > 22750 ) {
+              movingPlatformdxsx.body.velocity.x = -30;
+              }
+              else if (movingPlatformdxsx.x < 22600) {
+              movingPlatformdxsx.body.velocity.x = 30;
+              }
+
+
+
+            //collisione player - prima piattaforma su e giù (foresta 2)
+            game.physics.arcade.collide(player, movingPlatform1f2);
+
+              if (movingPlatform1f2.y > 320) {
+                movingPlatform1f2.body.velocity.y = -20;
+                }
+                else if (movingPlatform1f2.y < 260) {
+                movingPlatform1f2.body.velocity.y = 20;
+                }
+
+
+                //collisione player - seconda piattaforma su e giù (foresta 2)
+                game.physics.arcade.collide(player, movingPlatform2f2);
+
+                  if (movingPlatform2f2.y > 440) {
+                    movingPlatform2f2.body.velocity.y = -20;
+                    }
+                    else if (movingPlatform2f2.y < 400) {
+                    movingPlatform2f2.body.velocity.y = 20;
+                    }
+
+
+
+                    //collisione con fiammapiccola1
+                        game.physics.arcade.collide(player, fiammapiccola1, bruciatofiammapiccola1);
+                        function bruciatofiammapiccola1 (a,b) {
+                          game.camera.shake(0.01, 500);
+                          a.kill();
+                          lives-=1;
+                          livesCrop.width = lives * livesIcon;
+                          livesCounter.updateCrop();
+                          game.time.events.add(2000, function() {
+                            player.revive();
+                            player.x = 10848;
+                            player.y = 410;
+                          })
+                        };
+
+
+                        //collisione con fiammapiccola2
+                            game.physics.arcade.collide(player, fiammapiccola2, bruciatofiammapiccola2);
+                            function bruciatofiammapiccola2 (a,b) {
+                              game.camera.shake(0.01, 500);
+                              a.kill();
+                              lives-=1;
+                              livesCrop.width = lives * livesIcon;
+                              livesCounter.updateCrop();
+                              game.time.events.add(2000, function() {
+                                player.revive();
+                                player.x = 11086;
+                                player.y = 550;
+                              })
+                            };
+
+
+                            //collisione con fiammapiccola3
+                                game.physics.arcade.collide(player, fiammapiccola3, bruciatofiammapiccola3);
+                                function bruciatofiammapiccola3 (a,b) {
+                                  game.camera.shake(0.01, 500);
+                                  a.kill();
+                                  lives-=1;
+                                  livesCrop.width = lives * livesIcon;
+                                  livesCounter.updateCrop();
+                                  game.time.events.add(2000, function() {
+                                    player.revive();
+                                    player.x = 15250;
+                                    player.y = 550;
+                                  })
+                                };
+
+
+                                //collisione con fiammapiccola4
+                                    game.physics.arcade.collide(player, fiammapiccola4, bruciatofiammapiccola4);
+                                    function bruciatofiammapiccola4 (a,b) {
+                                      game.camera.shake(0.01, 500);
+                                      a.kill();
+                                      lives-=1;
+                                      livesCrop.width = lives * livesIcon;
+                                      livesCounter.updateCrop();
+                                      game.time.events.add(2000, function() {
+                                        player.revive();
+                                        player.x = 18300;
+                                        player.y = 540;
+                                      })
+                                    };
+
+
+                                    //collisione con fiammapiccola6
+                                        game.physics.arcade.collide(player, fiammapiccola6, bruciatofiammapiccola6);
+                                        function bruciatofiammapiccola6 (a,b) {
+                                          game.camera.shake(0.01, 500);
+                                          a.kill();
+                                          lives-=1;
+                                          livesCrop.width = lives * livesIcon;
+                                          livesCounter.updateCrop();
+                                          game.time.events.add(2000, function() {
+                                            player.revive();
+                                            player.x = 20000;
+                                            player.y = 220;
+                                          })
+                                        };
+
+
+                                        //collisione con fiammapiccola7
+                                            game.physics.arcade.collide(player, fiammapiccola7, bruciatofiammapiccola7);
+                                            function bruciatofiammapiccola7 (a,b) {
+                                              game.camera.shake(0.01, 500);
+                                              a.kill();
+                                              lives-=1;
+                                              livesCrop.width = lives * livesIcon;
+                                              livesCounter.updateCrop();
+                                              game.time.events.add(2000, function() {
+                                                player.revive();
+                                                player.x = 20000;
+                                                player.y = 220;
+                                              })
+                                            };
+
+
+                                            //collisione con fiammapiccola8
+                                                game.physics.arcade.collide(player, fiammapiccola8, bruciatofiammapiccola8);
+                                                function bruciatofiammapiccola8 (a,b) {
+                                                  game.camera.shake(0.01, 500);
+                                                  a.kill();
+                                                  lives-=1;
+                                                  livesCrop.width = lives * livesIcon;
+                                                  livesCounter.updateCrop();
+                                                  game.time.events.add(2000, function() {
+                                                    player.revive();
+                                                    player.x = 20000;
+                                                    player.y = 220;
+                                                  })
+                                                };
+
+
+
+                                                //collisione con fiammapiccola9
+                                                    game.physics.arcade.collide(player, fiammapiccola9, bruciatofiammapiccola9);
+                                                    function bruciatofiammapiccola9 (a,b) {
+                                                      game.camera.shake(0.01, 500);
+                                                      a.kill();
+                                                      lives-=1;
+                                                      livesCrop.width = lives * livesIcon;
+                                                      livesCounter.updateCrop();
+                                                      game.time.events.add(2000, function() {
+                                                        player.revive();
+                                                        player.x = 21600;
+                                                        player.y = 200;
+                                                      })
+                                                    };
+
+
+                //collisione tra proiettili e fiamme foresta2
+                game.physics.arcade.overlap(fiammapiccola1f2, goccialanciata.bullets, killfiammapiccola1f2);
+                function killfiammapiccola1f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+                game.physics.arcade.overlap(fiammapiccola2f2, goccialanciata.bullets, killfiammapiccola2f2);
+                function killfiammapiccola2f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+                game.physics.arcade.overlap(fiammapiccola3f2, goccialanciata.bullets, killfiammapiccola3f2);
+                function killfiammapiccola3f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+
+
+
+
+                game.physics.arcade.overlap(fiammapiccola4f2, goccialanciata.bullets, killfiammapiccola4f2);
+                function killfiammapiccola4f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+                game.physics.arcade.overlap(fiammapiccola5f2, goccialanciata.bullets, killfiammapiccola5f2);
+                function killfiammapiccola5f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+                game.physics.arcade.overlap(fiammapiccola6f2, goccialanciata.bullets, killfiammapiccola6f2);
+                function killfiammapiccola6f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+                game.physics.arcade.overlap(fiammapiccola7f2, goccialanciata.bullets, killfiammapiccola7f2);
+                function killfiammapiccola7f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+
+                game.physics.arcade.overlap(fiammapiccola8f2, goccialanciata.bullets, killfiammapiccola8f2);
+                function killfiammapiccola8f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+                game.physics.arcade.overlap(fiammagrande2f2, goccialanciata.bullets, killfiammagrande2f2);
+                function killfiammagrande2f2 (a,b) {
+                  a.kill();
+                  b.kill();
+                };
+
+
+
+
+
+
+                            //contatore fiamma media
+
+                            if (cfm==2){
+                            game.physics.arcade.overlap(fiammamedia1f2, goccialanciata.bullets, killfiammamedia1f2);
+                            function killfiammamedia1f2 (a,b) {
+                              a.scale.setTo(0.5, 0.5);
+                              b.kill();
+                              cfm-=1;
+                              fiammamedia1f2.x=33690;
+                              fiammamedia1f2.y= 275;
+                            };};
+
+                            if (cfm==1){
+                            game.physics.arcade.overlap(fiammamedia1f2, goccialanciata.bullets, killfiammamedia1f2);
+                            function killfiammamedia1f2 (a,b) {
+                              a.kill();
+                              b.kill();
+                              cfm+=1;
+            }; };
+
+
+            //contatorefiammagrande
+
+            if (cfg==3){
+            game.physics.arcade.overlap(fiammagrande1f2, goccialanciata.bullets, killfiammagrande1f2);
+            function killfiammagrande1f2 (a,b) {
+              a.scale.setTo(0.75, 0.75);
+              b.kill();
+              cfg-=1;
+              fiammagrande1f2.x=27100;
+              fiammagrande1f2.y= 360;
+            };};
+
+            if (cfg==2){
+            game.physics.arcade.overlap(fiammagrande1f2, goccialanciata.bullets, killfiammagrande1f2);
+            function killfiammagrande1f2 (a,b) {
+              a.scale.setTo(0.5, 0.5);
+              b.kill();
+              cfg-=1;
+              fiammagrande1f2.x=27120;
+              fiammagrande1f2.y= 450;
+            };};
+
+            if (cfg==1){
+            game.physics.arcade.overlap(fiammagrande1f2, goccialanciata.bullets, killfiammagrande1f2);
+            function killfiammagrande1f2 (a,b) {
+              a.kill();
+              b.kill();
+              cfg+=2;
+            }; };
+
+
+
+
+                //gameover
+                if (lives==0) {
+                  schermata_gameover.visible = true;
+                  icona_home.visible = true;
+                  icona_play.visible = true;
+                };
+
+
+                //contatore gocce
+                if (dropsIcon >0 && fireButton.justDown && drops >0) {
+                   goccialanciata.fire();
+                   drops -= 1;
+                   dropsCrop.width = drops *dropsIcon;
+                   dropsCounter.updateCrop();
+                 }
+
+                 if (player.x > 9487 && player.x < 9495) {
+                   game.camera.shake(0.03, 500);
+                 };
+
+
+            if (player.x > -5 && player.x < 500) {
+              istruzione1.visible = true;
+            }
+            else {
+              istruzione1.visible = false;
+            }
+
+
+            if (player.body.x > 3500 && player.body.x < 4000) {
+              istruzione2.visible = true;
+            }
+            else {
+              istruzione2.visible = false;
+            }
+
+
+            if (player.x > 5750 && player.x < 6250) {
+              istruzione3.visible = true;
+            }
+            else {
+              istruzione3.visible = false;
+            }
+
+
+            if (player.x > 24310 && player.x < 24810) {
+              istruzione4.visible = true;
+            }
+            else {
+              istruzione4.visible = false;
+            }
+
+
+            if (player.x > 9500 && player.x < 10300) {
+              istruzione5.visible = true;
+            }
+            else {
+              istruzione5.visible = false;
+            }
+
+            if (player.x > 25250 && player.x < 27600) {
+              istruzione6.visible = true;
+            }
+            else {
+              istruzione6.visible = false;
+            }
+
+            if (player.x > 35100 && player.x < 36100) {
+              istruzione7.visible = true;
+            }
+            else {
+              istruzione7.visible = false;
+            }
+
+
+
+            if (cursors.left.isDown)
+            {
+                player.body.velocity.x = -250;
+                player.animations.play('left');
+
+            }
+            else if (cursors.right.isDown)
+            {
+                player.body.velocity.x = 250;
+                player.animations.play('right');
+            }
+
+             else {
+            player.animations.stop();
+            player.frame = 9;
+            }
+
+            if (jumpButton.isDown && (player.body.onFloor() || player.body.touching.down || volare))
+            {
+                player.body.velocity.y = -400;
+            }
+
+            if (jumpButton.isDown && cursors.right.isDown)
+            {
+              player.animations.play('saltoDx');
+            }
+
+            if (jumpButton.isDown && cursors.left.isDown)
+            {
+              player.animations.play('saltoSx');
+            }
+
+  }
+
+  };
+
+    </script>
+
+
+    </body>
+</html>
